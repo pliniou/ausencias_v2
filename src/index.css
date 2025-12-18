@@ -1,0 +1,480 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* --- Light Theme (Clean & Professional) --- */
+    --background: 0 0% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Primary - Vibrant Blue */
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Teal */
+    --secondary: 173 58% 39%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Accent - Purple */
+    --accent: 262 83% 58%;
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 25% 40%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 85%;
+    --input: 214 32% 85%;
+    --ring: 221 83% 53%;
+
+    --radius: 0.75rem;
+
+    /* Success/Warning/Info - darker for light theme */
+    --success: 142 76% 36%;
+    --warning: 32 95% 44%;
+    --info: 199 89% 42%;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 40% 96%;
+    --sidebar-accent-foreground: 221 83% 40%;
+    --sidebar-border: 214 32% 85%;
+    --sidebar-ring: 221 83% 53%;
+
+    /* Status - darker for better visibility */
+    --status-active: 142 76% 36%;
+    --status-planned: 32 95% 44%;
+    --status-ended: 215 20% 50%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(262 83% 58%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(173 58% 39%) 0%, hsl(199 89% 48%) 100%);
+
+    /* Custom leave type colors - saturated for light theme */
+    --leave-vacation: 210 100% 45%;
+    --leave-vacation-foreground: 0 0% 100%;
+    --leave-medical: 340 82% 45%;
+    --leave-medical-foreground: 0 0% 100%;
+    --leave-maternity: 270 70% 50%;
+    --leave-maternity-foreground: 0 0% 100%;
+    --leave-paternity: 260 70% 50%;
+    --leave-paternity-foreground: 0 0% 100%;
+    --leave-wedding: 45 93% 40%;
+    --leave-wedding-foreground: 0 0% 100%;
+    --leave-death: 220 20% 40%;
+    --leave-death-foreground: 0 0% 100%;
+    --leave-study: 180 70% 35%;
+    --leave-study-foreground: 0 0% 100%;
+    --leave-blood: 0 75% 45%;
+    --leave-blood-foreground: 0 0% 100%;
+    --leave-court: 30 80% 45%;
+    --leave-court-foreground: 0 0% 100%;
+    --leave-electoral: 240 60% 50%;
+    --leave-electoral-foreground: 0 0% 100%;
+    --leave-other: 200 50% 45%;
+    --leave-other-foreground: 0 0% 100%;
+  }
+
+  .dark {
+    /* --- Dark Theme (Premium Dark) --- */
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 10%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 10%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Primary - Bright Blue */
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 6%;
+
+    /* Secondary - Bright Teal */
+    --secondary: 172 66% 50%;
+    --secondary-foreground: 222 47% 6%;
+
+    /* Accent - Bright Purple */
+    --accent: 262 83% 70%;
+    --accent-foreground: 222 47% 6%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 217 33% 20%;
+    --input: 217 33% 20%;
+    --ring: 217 91% 60%;
+
+    /* Success/Warning/Info */
+    --success: 142 71% 50%;
+    --warning: 38 92% 55%;
+    --info: 199 89% 55%;
+
+    /* Sidebar */
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 222 47% 6%;
+    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 20%;
+    --sidebar-ring: 217 91% 60%;
+
+    /* Status */
+    --status-active: 142 71% 50%;
+    --status-planned: 38 92% 55%;
+    --status-ended: 215 20% 65%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(262 83% 70%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(172 66% 50%) 0%, hsl(199 89% 55%) 100%);
+  }
+
+  .light {
+    /* --- Light Theme (explicit, matching :root) --- */
+    --background: 0 0% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 173 58% 39%;
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 262 83% 58%;
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 25% 40%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 85%;
+    --input: 214 32% 85%;
+    --ring: 221 83% 53%;
+
+    --success: 142 76% 36%;
+    --warning: 32 95% 44%;
+    --info: 199 89% 42%;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 40% 96%;
+    --sidebar-accent-foreground: 221 83% 40%;
+    --sidebar-border: 214 32% 85%;
+    --sidebar-ring: 221 83% 53%;
+
+    --status-active: 142 76% 36%;
+    --status-planned: 32 95% 44%;
+    --status-ended: 215 20% 50%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(262 83% 58%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(173 58% 39%) 0%, hsl(199 89% 48%) 100%);
+
+    /* Leave colors - darker for light theme legibility */
+    --leave-vacation: 210 100% 45%;
+    --leave-vacation-foreground: 0 0% 100%;
+    --leave-medical: 340 82% 45%;
+    --leave-medical-foreground: 0 0% 100%;
+    --leave-maternity: 270 70% 50%;
+    --leave-maternity-foreground: 0 0% 100%;
+    --leave-paternity: 260 70% 50%;
+    --leave-paternity-foreground: 0 0% 100%;
+    --leave-wedding: 45 93% 40%;
+    --leave-wedding-foreground: 0 0% 100%;
+    --leave-death: 220 20% 40%;
+    --leave-death-foreground: 0 0% 100%;
+    --leave-study: 180 70% 35%;
+    --leave-study-foreground: 0 0% 100%;
+    --leave-blood: 0 75% 45%;
+    --leave-blood-foreground: 0 0% 100%;
+    --leave-court: 30 80% 45%;
+    --leave-court-foreground: 0 0% 100%;
+    --leave-electoral: 240 60% 50%;
+    --leave-electoral-foreground: 0 0% 100%;
+    --leave-other: 200 50% 45%;
+    --leave-other-foreground: 0 0% 100%;
+  }
+
+  .ocean {
+    /* --- Ocean Theme (Blues & Teals) --- */
+    --background: 200 50% 6%;
+    --foreground: 185 40% 95%;
+
+    --card: 200 50% 10%;
+    --card-foreground: 185 40% 95%;
+
+    --popover: 200 50% 10%;
+    --popover-foreground: 185 40% 95%;
+
+    /* Primary - Ocean Blue */
+    --primary: 199 89% 55%;
+    --primary-foreground: 200 50% 6%;
+
+    /* Secondary - Aqua */
+    --secondary: 174 72% 50%;
+    --secondary-foreground: 200 50% 6%;
+
+    /* Accent - Cyan */
+    --accent: 187 85% 53%;
+    --accent-foreground: 200 50% 6%;
+
+    --muted: 200 40% 17%;
+    --muted-foreground: 185 25% 60%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 200 40% 20%;
+    --input: 200 40% 20%;
+    --ring: 199 89% 55%;
+
+    --success: 160 84% 45%;
+    --warning: 38 92% 55%;
+    --info: 187 85% 53%;
+
+    --sidebar-background: 200 50% 8%;
+    --sidebar-foreground: 185 40% 95%;
+    --sidebar-primary: 199 89% 55%;
+    --sidebar-primary-foreground: 200 50% 6%;
+    --sidebar-accent: 200 40% 17%;
+    --sidebar-accent-foreground: 185 40% 95%;
+    --sidebar-border: 200 40% 20%;
+    --sidebar-ring: 199 89% 55%;
+
+    --status-active: 160 84% 45%;
+    --status-planned: 38 92% 55%;
+    --status-ended: 185 25% 60%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(199 89% 55%) 0%, hsl(174 72% 50%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(187 85% 53%) 0%, hsl(160 84% 45%) 100%);
+  }
+
+  .forest {
+    /* --- Forest Theme (Greens & Earth) --- */
+    --background: 150 30% 6%;
+    --foreground: 120 20% 95%;
+
+    --card: 150 30% 10%;
+    --card-foreground: 120 20% 95%;
+
+    --popover: 150 30% 10%;
+    --popover-foreground: 120 20% 95%;
+
+    /* Primary - Forest Green */
+    --primary: 142 71% 50%;
+    --primary-foreground: 150 30% 6%;
+
+    /* Secondary - Olive */
+    --secondary: 84 60% 45%;
+    --secondary-foreground: 150 30% 6%;
+
+    /* Accent - Lime */
+    --accent: 80 75% 55%;
+    --accent-foreground: 150 30% 6%;
+
+    --muted: 150 25% 17%;
+    --muted-foreground: 120 15% 60%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 150 25% 20%;
+    --input: 150 25% 20%;
+    --ring: 142 71% 50%;
+
+    --success: 142 71% 50%;
+    --warning: 45 93% 50%;
+    --info: 188 78% 50%;
+
+    --sidebar-background: 150 30% 8%;
+    --sidebar-foreground: 120 20% 95%;
+    --sidebar-primary: 142 71% 50%;
+    --sidebar-primary-foreground: 150 30% 6%;
+    --sidebar-accent: 150 25% 17%;
+    --sidebar-accent-foreground: 120 20% 95%;
+    --sidebar-border: 150 25% 20%;
+    --sidebar-ring: 142 71% 50%;
+
+    --status-active: 142 71% 50%;
+    --status-planned: 45 93% 50%;
+    --status-ended: 120 15% 60%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(142 71% 50%) 0%, hsl(84 60% 45%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(80 75% 55%) 0%, hsl(45 93% 50%) 100%);
+  }
+}
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@layer components {
+
+  /* Card Styles - Modern Flat Design */
+  .glass-card {
+    @apply bg-card border border-border shadow-sm rounded-xl transition-all duration-200;
+  }
+
+  .glass-card:hover {
+    @apply shadow-md border-primary/20;
+  }
+
+  .stat-card {
+    @apply glass-card p-5 flex flex-col justify-between transition-all duration-200;
+  }
+
+  .stat-card:hover {
+    @apply shadow-md border-primary/30 translate-y-[-2px];
+  }
+
+  /* Badge Styles */
+  .leave-badge {
+    @apply inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold tracking-wide transition-all duration-200;
+  }
+
+  /* Navigation Styles */
+  .nav-link {
+    @apply flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-muted-foreground transition-all duration-200;
+  }
+
+  .nav-link:hover {
+    @apply text-foreground bg-accent/50;
+  }
+
+  .nav-link-active {
+    @apply bg-primary/10 text-primary shadow-sm;
+  }
+
+  /* Spacing Utilities */
+  .section-spacing {
+    @apply space-y-6;
+  }
+
+  .card-spacing {
+    @apply p-5;
+  }
+
+  .compact-spacing {
+    @apply space-y-3;
+  }
+
+  .grid-gap {
+    @apply gap-4;
+  }
+
+  /* Animations */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  .shimmer {
+    animation: shimmer 2s infinite;
+    background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
+    background-size: 1000px 100%;
+  }
+
+  /* Interactive States */
+  .interactive-hover {
+    @apply transition-all duration-200 hover:shadow-md hover:translate-y-[-1px];
+  }
+
+  .button-press {
+    @apply active:scale-[0.98] transition-transform duration-100;
+  }
+
+  /* Loading States */
+  .loading-pulse {
+    @apply animate-pulse bg-muted rounded;
+  }
+
+  /* Focus States */
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+}
