@@ -18,7 +18,7 @@ const copySqlWasm = () => ({
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-    base: '/Project_Ausencias/',
+    base: '/ausencias_v2/',
     server: {
         host: "::",
         port: 8080,
