@@ -1,5 +1,6 @@
 import { format, parseISO, isWithinInterval, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isToday, isSameDay, isAfter, isBefore, startOfDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { Holiday } from './types';
 
 export const formatDateBR = (date: Date | string) => {
     const d = typeof date === 'string' ? parseISO(date) : date;
@@ -55,6 +56,34 @@ export const getLeaveStatus = (startDate: string, endDate: string) => {
         return 'ENCERRADO';
     }
     return 'ATIVO';
+};
+
+export const formatMonthShort = (date: Date) => {
+    return format(date, "MMM/yy", { locale: ptBR }).toUpperCase();
+};
+
+export const isHoliday = (date: Date, holidays: Holiday[]) => {
+    const dateStr = format(date, 'yyyy-MM-dd');
+    const dayMonth = format(date, 'MM-dd');
+
+    return holidays.find(h => {
+        if (h.recurring) {
+            return h.date.endsWith(dayMonth);
+        }
+        return h.date === dateStr;
+    });
+};
+
+export const countBusinessDays = (date: Date, holidays: Holiday[]) => {
+    const start = startOfMonth(date);
+    const end = endOfMonth(date);
+    const days = eachDayOfInterval({ start, end });
+
+    return days.filter(day => {
+        const isWeekendDay = isWeekend(day);
+        const isHolidayDay = isHoliday(day, holidays);
+        return !isWeekendDay && !isHolidayDay;
+    }).length;
 };
 
 export const nextMonth = (date: Date) => addMonths(date, 1);

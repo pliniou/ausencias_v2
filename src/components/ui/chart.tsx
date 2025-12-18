@@ -277,20 +277,22 @@ const ChartLegendContent = React.forwardRef<
 ChartLegendContent.displayName = "ChartLegend";
 
 // Helper to extract item config from a payload.
-function getPayloadConfigFromPayload(config: ChartConfig, payload: any, key: string) {
+function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key: string) {
     if (typeof payload !== "object" || payload === null) {
         return undefined;
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const typedPayload: Record<string, any> = payload;
 
     const payloadPayload =
-        "payload" in payload && typeof payload.payload === "object" && payload.payload !== null
-            ? payload.payload
+        "payload" in typedPayload && typeof typedPayload.payload === "object" && typedPayload.payload !== null
+            ? typedPayload.payload
             : undefined;
 
     let configLabelKey = key;
 
-    if (key in payload && typeof payload[key] === "string") {
-        configLabelKey = payload[key];
+    if (key in typedPayload && typeof typedPayload[key] === "string") {
+        configLabelKey = typedPayload[key];
     } else if (
         payloadPayload &&
         key in payloadPayload &&

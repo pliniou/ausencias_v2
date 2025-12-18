@@ -84,6 +84,7 @@ export interface Holiday {
     date: string;
     name: string;
     type: 'NACIONAL' | 'ESTADUAL' | 'MUNICIPAL' | 'FACULTATIVO' | 'PONTO_FACULTATIVO';
+    recurring?: boolean;
 }
 
 export interface CompanyEvent {
