@@ -1,4 +1,51 @@
-/* Google Fonts import removed for intranet deployment */
+/* Local TikTokSans fonts for intranet deployment */
+@font-face {
+  font-family: 'TikTokSans';
+  src: url('/fonts/TikTokSans-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TikTokSans';
+  src: url('/fonts/TikTokSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TikTokSans';
+  src: url('/fonts/TikTokSans-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TikTokSans';
+  src: url('/fonts/TikTokSans-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TikTokSans';
+  src: url('/fonts/TikTokSans-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TikTokSans';
+  src: url('/fonts/TikTokSans-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -6,7 +53,8 @@
 
 @layer base {
   :root {
-    /* --- Light Theme (Clean & Professional) --- */
+    /* --- Light Theme (Sistema de Gestão de Ausências) --- */
+    /* New Palette: Primary #465EFF (Blue), Secondary #FCFC30 (Yellow) */
     --background: 0 0% 98%;
     --foreground: 222 47% 11%;
 
@@ -16,77 +64,87 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    /* Primary - Vibrant Blue */
-    --primary: 221 83% 53%;
+    /* Primary - Blue #465EFF */
+    --primary: 231 100% 64%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Teal */
-    --secondary: 173 58% 39%;
-    --secondary-foreground: 0 0% 100%;
+    /* Secondary - Yellow #FCFC30 */
+    --secondary: 60 97% 59%;
+    --secondary-foreground: 222 47% 11%;
 
-    /* Accent - Purple */
-    --accent: 262 83% 58%;
+    /* Accent - Purple #735CC6 */
+    --accent: 257 51% 57%;
     --accent-foreground: 0 0% 100%;
 
     --muted: 210 40% 96%;
     --muted-foreground: 215 25% 40%;
 
-    --destructive: 0 72% 51%;
+    /* Danger - Pink #FF6E91 */
+    --destructive: 347 100% 72%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 214 32% 85%;
     --input: 214 32% 85%;
-    --ring: 221 83% 53%;
+    --ring: 231 100% 64%;
 
     --radius: 0.75rem;
 
-    /* Success/Warning/Info - darker for light theme */
-    --success: 142 76% 36%;
-    --warning: 32 95% 44%;
-    --info: 199 89% 42%;
+    /* Success #00EBD0 / Warning #FFF7B5 / Info #54DCFC */
+    --success: 170 100% 46%;
+    --warning: 50 100% 85%;
+    --warning-foreground: 222 47% 11%;
+    --info: 193 96% 66%;
 
     /* Sidebar */
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 222 47% 11%;
-    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary: 231 100% 64%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 210 40% 96%;
-    --sidebar-accent-foreground: 221 83% 40%;
+    --sidebar-accent-foreground: 231 100% 50%;
     --sidebar-border: 214 32% 85%;
-    --sidebar-ring: 221 83% 53%;
+    --sidebar-ring: 231 100% 64%;
 
-    /* Status - darker for better visibility */
-    --status-active: 142 76% 36%;
-    --status-planned: 32 95% 44%;
+    /* Status - for leave status */
+    --status-active: 170 100% 46%;
+    --status-planned: 50 100% 85%;
     --status-ended: 215 20% 50%;
 
+    /* Approval Status Colors */
+    --status-pending: 50 100% 85%;
+    --status-pending-foreground: 222 47% 11%;
+    --status-approved: 170 100% 46%;
+    --status-approved-foreground: 0 0% 100%;
+    --status-rejected: 347 100% 72%;
+    --status-rejected-foreground: 0 0% 100%;
+
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(262 83% 58%) 100%);
-    --gradient-secondary: linear-gradient(135deg, hsl(173 58% 39%) 0%, hsl(199 89% 48%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(231 100% 64%) 0%, hsl(257 51% 57%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(60 97% 59%) 0%, hsl(170 100% 46%) 100%);
 
     /* Custom leave type colors - saturated for light theme */
-    --leave-vacation: 210 100% 45%;
+    --leave-vacation: 231 100% 64%;
     --leave-vacation-foreground: 0 0% 100%;
-    --leave-medical: 340 82% 45%;
+    --leave-medical: 347 100% 72%;
     --leave-medical-foreground: 0 0% 100%;
-    --leave-maternity: 270 70% 50%;
+    --leave-maternity: 257 51% 57%;
     --leave-maternity-foreground: 0 0% 100%;
-    --leave-paternity: 260 70% 50%;
+    --leave-paternity: 247 100% 69%;
     --leave-paternity-foreground: 0 0% 100%;
-    --leave-wedding: 45 93% 40%;
-    --leave-wedding-foreground: 0 0% 100%;
+    --leave-wedding: 60 97% 59%;
+    --leave-wedding-foreground: 222 47% 11%;
     --leave-death: 220 20% 40%;
     --leave-death-foreground: 0 0% 100%;
-    --leave-study: 180 70% 35%;
-    --leave-study-foreground: 0 0% 100%;
-    --leave-blood: 0 75% 45%;
+    --leave-study: 193 96% 66%;
+    --leave-study-foreground: 222 47% 11%;
+    --leave-blood: 347 100% 72%;
     --leave-blood-foreground: 0 0% 100%;
     --leave-court: 30 80% 45%;
     --leave-court-foreground: 0 0% 100%;
-    --leave-electoral: 240 60% 50%;
+    --leave-electoral: 231 100% 64%;
     --leave-electoral-foreground: 0 0% 100%;
-    --leave-other: 200 50% 45%;
-    --leave-other-foreground: 0 0% 100%;
+    --leave-other: 170 100% 46%;
+    --leave-other-foreground: 222 47% 11%;
   }
 
   .dark {
@@ -100,55 +158,66 @@
     --popover: 222 47% 10%;
     --popover-foreground: 210 40% 98%;
 
-    /* Primary - Bright Blue */
-    --primary: 217 91% 60%;
+    /* Primary - Blue #465EFF (brighter for dark) */
+    --primary: 231 100% 68%;
     --primary-foreground: 222 47% 6%;
 
-    /* Secondary - Bright Teal */
-    --secondary: 172 66% 50%;
+    /* Secondary - Yellow #FCFC30 */
+    --secondary: 60 97% 59%;
     --secondary-foreground: 222 47% 6%;
 
-    /* Accent - Bright Purple */
-    --accent: 262 83% 70%;
+    /* Accent - Purple #BDB6FF (lighter for dark) */
+    --accent: 247 100% 86%;
     --accent-foreground: 222 47% 6%;
 
     --muted: 217 33% 17%;
     --muted-foreground: 215 20% 65%;
 
-    --destructive: 0 84% 60%;
+    /* Danger - Pink #FF6E91 */
+    --destructive: 347 100% 72%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 217 33% 20%;
     --input: 217 33% 20%;
-    --ring: 217 91% 60%;
+    --ring: 231 100% 68%;
 
-    /* Success/Warning/Info */
-    --success: 142 71% 50%;
-    --warning: 38 92% 55%;
-    --info: 199 89% 55%;
+    /* Success #00EBD0 / Warning #FFF7B5 / Info #54DCFC */
+    --success: 170 100% 46%;
+    --warning: 50 100% 85%;
+    --warning-foreground: 222 47% 11%;
+    --info: 193 96% 66%;
 
     /* Sidebar */
     --sidebar-background: 222 47% 8%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary: 231 100% 68%;
     --sidebar-primary-foreground: 222 47% 6%;
     --sidebar-accent: 217 33% 17%;
     --sidebar-accent-foreground: 210 40% 98%;
     --sidebar-border: 217 33% 20%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-ring: 231 100% 68%;
 
     /* Status */
-    --status-active: 142 71% 50%;
-    --status-planned: 38 92% 55%;
+    --status-active: 170 100% 46%;
+    --status-planned: 50 100% 85%;
     --status-ended: 215 20% 65%;
 
+    /* Approval Status Colors */
+    --status-pending: 50 100% 85%;
+    --status-pending-foreground: 222 47% 11%;
+    --status-approved: 170 100% 46%;
+    --status-approved-foreground: 222 47% 6%;
+    --status-rejected: 347 100% 72%;
+    --status-rejected-foreground: 0 0% 100%;
+
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(262 83% 70%) 100%);
-    --gradient-secondary: linear-gradient(135deg, hsl(172 66% 50%) 0%, hsl(199 89% 55%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(231 100% 68%) 0%, hsl(247 100% 86%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(60 97% 59%) 0%, hsl(170 100% 46%) 100%);
   }
 
   .light {
     /* --- Light Theme (explicit, matching :root) --- */
+    /* New Palette: Primary #465EFF (Blue), Secondary #FCFC30 (Yellow) */
     --background: 0 0% 98%;
     --foreground: 222 47% 11%;
 
@@ -158,68 +227,82 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    --primary: 221 83% 53%;
+    /* Primary - Blue #465EFF */
+    --primary: 231 100% 64%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 173 58% 39%;
-    --secondary-foreground: 0 0% 100%;
+    /* Secondary - Yellow #FCFC30 */
+    --secondary: 60 97% 59%;
+    --secondary-foreground: 222 47% 11%;
 
-    --accent: 262 83% 58%;
+    /* Accent - Purple #735CC6 */
+    --accent: 257 51% 57%;
     --accent-foreground: 0 0% 100%;
 
     --muted: 210 40% 96%;
     --muted-foreground: 215 25% 40%;
 
-    --destructive: 0 72% 51%;
+    /* Danger - Pink #FF6E91 */
+    --destructive: 347 100% 72%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 214 32% 85%;
     --input: 214 32% 85%;
-    --ring: 221 83% 53%;
+    --ring: 231 100% 64%;
 
-    --success: 142 76% 36%;
-    --warning: 32 95% 44%;
-    --info: 199 89% 42%;
+    /* Success #00EBD0 / Warning #FFF7B5 / Info #54DCFC */
+    --success: 170 100% 46%;
+    --warning: 50 100% 85%;
+    --warning-foreground: 222 47% 11%;
+    --info: 193 96% 66%;
 
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 222 47% 11%;
-    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary: 231 100% 64%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 210 40% 96%;
-    --sidebar-accent-foreground: 221 83% 40%;
+    --sidebar-accent-foreground: 231 100% 50%;
     --sidebar-border: 214 32% 85%;
-    --sidebar-ring: 221 83% 53%;
+    --sidebar-ring: 231 100% 64%;
 
-    --status-active: 142 76% 36%;
-    --status-planned: 32 95% 44%;
+    --status-active: 170 100% 46%;
+    --status-planned: 50 100% 85%;
     --status-ended: 215 20% 50%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(262 83% 58%) 100%);
-    --gradient-secondary: linear-gradient(135deg, hsl(173 58% 39%) 0%, hsl(199 89% 48%) 100%);
+    /* Approval Status Colors */
+    --status-pending: 50 100% 85%;
+    --status-pending-foreground: 222 47% 11%;
+    --status-approved: 170 100% 46%;
+    --status-approved-foreground: 0 0% 100%;
+    --status-rejected: 347 100% 72%;
+    --status-rejected-foreground: 0 0% 100%;
 
-    /* Leave colors - darker for light theme legibility */
-    --leave-vacation: 210 100% 45%;
+    --gradient-primary: linear-gradient(135deg, hsl(231 100% 64%) 0%, hsl(257 51% 57%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(60 97% 59%) 0%, hsl(170 100% 46%) 100%);
+
+    /* Leave colors - using new palette */
+    --leave-vacation: 231 100% 64%;
     --leave-vacation-foreground: 0 0% 100%;
-    --leave-medical: 340 82% 45%;
+    --leave-medical: 347 100% 72%;
     --leave-medical-foreground: 0 0% 100%;
-    --leave-maternity: 270 70% 50%;
+    --leave-maternity: 257 51% 57%;
     --leave-maternity-foreground: 0 0% 100%;
-    --leave-paternity: 260 70% 50%;
+    --leave-paternity: 247 100% 69%;
     --leave-paternity-foreground: 0 0% 100%;
-    --leave-wedding: 45 93% 40%;
-    --leave-wedding-foreground: 0 0% 100%;
+    --leave-wedding: 60 97% 59%;
+    --leave-wedding-foreground: 222 47% 11%;
     --leave-death: 220 20% 40%;
     --leave-death-foreground: 0 0% 100%;
-    --leave-study: 180 70% 35%;
-    --leave-study-foreground: 0 0% 100%;
-    --leave-blood: 0 75% 45%;
+    --leave-study: 193 96% 66%;
+    --leave-study-foreground: 222 47% 11%;
+    --leave-blood: 347 100% 72%;
     --leave-blood-foreground: 0 0% 100%;
     --leave-court: 30 80% 45%;
     --leave-court-foreground: 0 0% 100%;
-    --leave-electoral: 240 60% 50%;
+    --leave-electoral: 231 100% 64%;
     --leave-electoral-foreground: 0 0% 100%;
-    --leave-other: 200 50% 45%;
-    --leave-other-foreground: 0 0% 100%;
+    --leave-other: 170 100% 46%;
+    --leave-other-foreground: 222 47% 11%;
   }
 
   .ocean {

@@ -1,9 +1,10 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, CalendarDays, Plane, Users, Moon, Sun, Waves, TreePine, ShieldCheck, LogOut, Palette, Check } from 'lucide-react';
+import { LayoutDashboard, CalendarDays, Plane, Moon, Sun, Waves, TreePine, ShieldCheck, LogOut, Palette, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/ui/Logo';
 import { useTheme, validThemes, type Theme } from '@/context/ThemeContext';
 import { useAuth } from '@/context/AuthContext';
+import { useConfig } from '@/context/ConfigContext';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
@@ -12,7 +13,6 @@ const navigation = [
     { name: 'Início', href: '/', icon: LayoutDashboard },
     { name: 'Calendário', href: '/calendario', icon: CalendarDays },
     { name: 'Afastamentos', href: '/afastamentos', icon: Plane },
-    { name: 'Cadastros', href: '/cadastros', icon: Users },
 ];
 
 const themeConfig: Record<Theme, { label: string; icon: React.ElementType; color: string }> = {
@@ -27,6 +27,7 @@ export function TopNavbar() {
     const navigate = useNavigate();
     const { theme, setTheme } = useTheme();
     const { user, logout } = useAuth();
+    const { sectorName } = useConfig();
 
     const handleLogout = () => {
         logout();
@@ -53,11 +54,11 @@ export function TopNavbar() {
                             className="h-8 w-auto object-contain"
                         />
                         <div className="hidden sm:flex flex-col justify-center leading-none">
-                            <span className="text-[9px] font-semibold tracking-[0.15em] text-primary/80 uppercase">
-                                Gestão
+                            <span className="text-xs font-bold tracking-tight text-foreground">
+                                Sistema de Gestão de Ausências
                             </span>
-                            <span className="text-sm font-bold tracking-tight text-foreground">
-                                Afastamentos
+                            <span className="text-[10px] font-medium text-muted-foreground">
+                                Setor: {sectorName}
                             </span>
                         </div>
                     </Link>

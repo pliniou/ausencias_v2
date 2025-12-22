@@ -30,11 +30,16 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { Holiday } from "@/lib/types";
 
-// Import backup utils
 import {
     downloadBackup,
     importBackup,
 } from "@/lib/backupUtils";
+
+// Import registration components (consolidated from RegistrationsPage)
+// Import registration components (consolidated from RegistrationsPage)
+import { EmployeesTab } from "@/components/registrations/EmployeesTab";
+import { EventsTab } from "@/components/registrations/EventsTab";
+import { ApprovalQueueTab } from "@/components/admin/ApprovalQueueTab";
 
 export default function AdminDashboard() {
     return (
@@ -45,10 +50,13 @@ export default function AdminDashboard() {
             </div>
 
             <Tabs defaultValue="overview" className="w-full">
-                <TabsList className="grid w-full grid-cols-4 lg:w-[600px] mb-8">
+                <TabsList className="grid w-full grid-cols-7 lg:w-[900px] mb-8">
                     <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+                    <TabsTrigger value="approvals">Aprovações</TabsTrigger>
                     <TabsTrigger value="users">Usuários</TabsTrigger>
+                    <TabsTrigger value="employees">Colaboradores</TabsTrigger>
                     <TabsTrigger value="holidays">Feriados</TabsTrigger>
+                    <TabsTrigger value="events">Eventos</TabsTrigger>
                     <TabsTrigger value="settings">Configurações</TabsTrigger>
                 </TabsList>
 
@@ -56,12 +64,24 @@ export default function AdminDashboard() {
                     <OverviewTab />
                 </TabsContent>
 
+                <TabsContent value="approvals" className="space-y-6">
+                    <ApprovalQueueTab />
+                </TabsContent>
+
                 <TabsContent value="users" className="space-y-6">
                     <UsersTab />
                 </TabsContent>
 
+                <TabsContent value="employees" className="space-y-6">
+                    <EmployeesTab />
+                </TabsContent>
+
                 <TabsContent value="holidays" className="space-y-6">
                     <HolidaysTab />
+                </TabsContent>
+
+                <TabsContent value="events" className="space-y-6">
+                    <EventsTab />
                 </TabsContent>
 
                 <TabsContent value="settings" className="space-y-6">
@@ -77,7 +97,13 @@ export default function AdminDashboard() {
 function OverviewTab() {
     const { employees, leaves, holidays } = useData();
     const { getAllUsers } = useAuth();
-    const users = getAllUsers();
+    const [userCount, setUserCount] = useState(0);
+
+    useEffect(() => {
+        if (getAllUsers) {
+            getAllUsers().then(users => setUserCount(users.length)).catch(() => setUserCount(0));
+        }
+    }, [getAllUsers]);
 
     return (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -105,7 +131,7 @@ function OverviewTab() {
                     <Users className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">{users.length}</div>
+                    <div className="text-2xl font-bold">{userCount}</div>
                 </CardContent>
             </Card>
             <Card>
@@ -134,13 +160,21 @@ function UsersTab() {
     const [role, setRole] = useState('user');
     const [employeeId, setEmployeeId] = useState('none');
 
-    const loadUsers = useCallback(() => {
-        setUsers(getAllUsers());
+    const loadUsers = useCallback(async () => {
+        if (getAllUsers) {
+            try {
+                const fetchedUsers = await getAllUsers();
+                setUsers(fetchedUsers);
+            } catch {
+                setUsers([]);
+            }
+        }
     }, [getAllUsers]);
 
     useEffect(() => { loadUsers(); }, [loadUsers]);
 
     const handleRegister = async () => {
+        if (!registerUser) return;
         try {
             await registerUser(username, password, role, employeeId === 'none' ? null : employeeId);
             setIsOpen(false);
@@ -153,11 +187,13 @@ function UsersTab() {
         }
     };
 
-    const handleDelete = (id: number) => {
+    const handleDelete = async (id: number) => {
         if (confirm("Confirmar exclusão?")) {
-            deleteUser(id);
-            loadUsers();
-            toast({ title: "Usuário removido" });
+            if (deleteUser) {
+                await deleteUser(id);
+                loadUsers();
+                toast({ title: "Usuário removido" });
+            }
         }
     }
 
@@ -338,9 +374,21 @@ function HolidaysTab() {
 function SettingsTab() {
     // Backup & Config Logic
     // Use ConfigContext for Roles/Departments
-    const { roles, addRole, deleteRole, departments, addDepartment, deleteDepartment } = useConfig();
+    const { roles, addRole, deleteRole, departments, addDepartment, deleteDepartment, sectorName, setSectorName } = useConfig();
     const [newRole, setNewRole] = useState('');
     const [newDept, setNewDept] = useState('');
+    const [tempSectorName, setTempSectorName] = useState(sectorName);
+
+    useEffect(() => {
+        setTempSectorName(sectorName);
+    }, [sectorName]);
+
+    const handleSaveSector = async () => {
+        if (setSectorName) {
+            await setSectorName(tempSectorName);
+            // toast({ title: "Nome do setor atualizado" }); // toast needed from hook
+        }
+    };
 
     // Backup Logic
     const { toast } = useToast();
@@ -357,6 +405,20 @@ function SettingsTab() {
 
     return (
         <div className="space-y-6">
+            {/* General Settings */}
+            <Card>
+                <CardHeader><CardTitle>Geral</CardTitle></CardHeader>
+                <CardContent>
+                    <div className="space-y-2 max-w-md">
+                        <Label>Nome do Setor (Exibido no Topo)</Label>
+                        <div className="flex gap-2">
+                            <Input value={tempSectorName} onChange={e => setTempSectorName(e.target.value)} placeholder="Ex: RH" />
+                            <Button onClick={handleSaveSector}>Salvar</Button>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+
             {/* Roles & Departments Side-by-Side */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card>

@@ -16,6 +16,7 @@ export const STORES = {
     SESSION: 'session',
     ROLES: 'roles',
     DEPARTMENTS: 'departments',
+    SETTINGS: 'settings', // Global settings like sector name
 } as const;
 
 type StoreName = typeof STORES[keyof typeof STORES];

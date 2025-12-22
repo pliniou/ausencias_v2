@@ -84,6 +84,7 @@ export const leaves: Leave[] = [
         workDaysOff: 11,
         efficiency: 100,
         status: 'PLANEJADO',
+        approvalStatus: 'APPROVED', // Existing data is pre-approved
     }
 ];
 

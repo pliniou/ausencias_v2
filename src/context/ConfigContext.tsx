@@ -11,12 +11,14 @@ import { type RoleItem, type DepartmentItem } from '@/lib/types';
 interface ConfigContextType {
     roles: RoleItem[];
     departments: DepartmentItem[];
+    sectorName: string; // Customizable sector name for navbar
     addRole: (name: string) => Promise<void>;
     updateRole: (id: string, name: string) => Promise<void>;
     deleteRole: (id: string) => Promise<void>;
     addDepartment: (name: string) => Promise<void>;
     updateDepartment: (id: string, name: string) => Promise<void>;
     deleteDepartment: (id: string) => Promise<void>;
+    setSectorName: (name: string) => Promise<void>;
     getRoleNames: () => string[];
     getDepartmentNames: () => string[];
 }
@@ -31,9 +33,12 @@ interface ConfigProviderProps {
 const toItems = (names: string[]): { id: string; name: string }[] =>
     names.map((name, index) => ({ id: `default-${index}`, name }));
 
+const DEFAULT_SECTOR_NAME = 'RH';
+
 export function ConfigProvider({ children }: ConfigProviderProps) {
     const [roles, setRoles] = useState<RoleItem[]>([]);
     const [departments, setDepartments] = useState<DepartmentItem[]>([]);
+    const [sectorName, setSectorNameState] = useState<string>(DEFAULT_SECTOR_NAME);
     const [loading, setLoading] = useState(true);
 
     // Initialize data
@@ -62,6 +67,13 @@ export function ConfigProvider({ children }: ConfigProviderProps) {
                     const defaultDepItems = toItems(defaultDepartments);
                     setDepartments(defaultDepItems);
                     await dataStore.setAll(STORES.DEPARTMENTS, defaultDepItems);
+                }
+
+                // Load sector name from settings
+                const settings = await dataStore.getAll(STORES.SETTINGS) as Array<{ id: string; value: string }>;
+                const sectorSetting = settings?.find(s => s.id === 'sectorName');
+                if (sectorSetting) {
+                    setSectorNameState(sectorSetting.value);
                 }
 
                 setLoading(false);
@@ -115,6 +127,13 @@ export function ConfigProvider({ children }: ConfigProviderProps) {
         await dataStore.delete(STORES.DEPARTMENTS, id);
     };
 
+    // Sector name setting
+    const setSectorName = async (name: string) => {
+        const trimmedName = name.trim() || DEFAULT_SECTOR_NAME;
+        setSectorNameState(trimmedName);
+        await dataStore.set(STORES.SETTINGS, { id: 'sectorName', value: trimmedName });
+    };
+
     // Helpers for dropdowns
     const getRoleNames = () => roles.map(r => r.name);
     const getDepartmentNames = () => departments.map(d => d.name);
@@ -127,12 +146,14 @@ export function ConfigProvider({ children }: ConfigProviderProps) {
         <ConfigContext.Provider value={{
             roles,
             departments,
+            sectorName,
             addRole,
             updateRole,
             deleteRole,
             addDepartment,
             updateDepartment,
             deleteDepartment,
+            setSectorName,
             getRoleNames,
             getDepartmentNames,
         }}>

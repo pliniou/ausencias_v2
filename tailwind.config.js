@@ -13,7 +13,8 @@ export default {
         },
         extend: {
             fontFamily: {
-                sans: ["Outfit", "sans-serif"],
+                sans: ["TikTokSans", "system-ui", "sans-serif"],
+                display: ["TikTokSans", "system-ui", "sans-serif"],
             },
             colors: {
                 border: "hsl(var(--border))",
@@ -60,8 +61,24 @@ export default {
                     ring: "hsl(var(--sidebar-ring))",
                 },
                 success: "hsl(var(--success))",
-                warning: "hsl(var(--warning))",
+                warning: {
+                    DEFAULT: "hsl(var(--warning))",
+                    foreground: "hsl(var(--warning-foreground))",
+                },
                 info: "hsl(var(--info))",
+                // Approval status colors
+                "status-pending": {
+                    DEFAULT: "hsl(var(--status-pending))",
+                    foreground: "hsl(var(--status-pending-foreground))",
+                },
+                "status-approved": {
+                    DEFAULT: "hsl(var(--status-approved))",
+                    foreground: "hsl(var(--status-approved-foreground))",
+                },
+                "status-rejected": {
+                    DEFAULT: "hsl(var(--status-rejected))",
+                    foreground: "hsl(var(--status-rejected-foreground))",
+                },
             },
             borderRadius: {
                 lg: "var(--radius)",

@@ -5,11 +5,16 @@ import { getLeaveStatus } from '@/lib/dateUtils';
 import { validateVacationRule } from '@/lib/businessRules';
 import { dataStore, STORES } from '@/repositories/DataStore';
 
-import { type Leave, type Employee, type Holiday, type CompanyEvent } from "@/lib/types";
+import { type Leave, type Employee, type Holiday, type CompanyEvent, type ApprovalStatus } from "@/lib/types";
 
 interface VacationValidationResult {
     valid: boolean;
     message?: string;
+}
+
+interface ApprovalInfo {
+    decidedBy: string;
+    decisionNote?: string;
 }
 
 interface DataContextType {
@@ -20,9 +25,11 @@ interface DataContextType {
     addEmployee: (employee: Omit<Employee, 'id'>) => Promise<void>;
     updateEmployee: (id: string, updates: Partial<Employee>) => Promise<void>;
     deleteEmployee: (id: string) => Promise<void>;
-    addLeave: (leave: Omit<Leave, 'id' | 'status'>) => Promise<void>;
+    addLeave: (leave: Omit<Leave, 'id' | 'status' | 'approvalStatus'>, isAdmin?: boolean, username?: string) => Promise<void>;
     updateLeave: (id: string, updates: Partial<Leave>) => Promise<void>;
     deleteLeave: (id: string) => Promise<void>;
+    approveLeave: (id: string, info: ApprovalInfo) => Promise<void>;
+    rejectLeave: (id: string, info: ApprovalInfo) => Promise<void>;
     addHoliday: (holiday: Omit<Holiday, 'id'>) => Promise<void>;
     updateHoliday: (id: string, updates: Partial<Holiday>) => Promise<void>;
     deleteHoliday: (id: string) => Promise<void>;
@@ -30,9 +37,11 @@ interface DataContextType {
     updateCompanyEvent: (id: string, updates: Partial<CompanyEvent>) => Promise<void>;
     deleteCompanyEvent: (id: string) => Promise<void>;
     getEmployeeById: (id: string) => Employee | undefined;
-    getActiveLeaves: () => Leave[];
-    getPlannedLeaves: () => Leave[];
-    getTodayLeaves: () => Leave[];
+    getActiveLeaves: () => Leave[]; // Only APPROVED leaves that are active
+    getPlannedLeaves: () => Leave[]; // Only APPROVED leaves that are planned
+    getTodayLeaves: () => Leave[]; // Only APPROVED leaves for today
+    getPendingLeaves: () => Leave[]; // Leaves awaiting approval
+    getApprovedLeaves: () => Leave[]; // All approved leaves
     validateVacationRule: (employeeId: string, startDate: string, daysOff: number, acquisitiveStart: string, acquisitiveEnd: string) => VacationValidationResult;
 }
 
@@ -125,9 +134,20 @@ export function DataProvider({ children }: DataProviderProps) {
         await dataStore.delete(STORES.EMPLOYEES, id);
     };
 
-    const addLeave = async (leave: Omit<Leave, 'id' | 'status'>) => {
+    const addLeave = async (leave: Omit<Leave, 'id' | 'status' | 'approvalStatus'>, isAdmin: boolean = false, username?: string) => {
         const status = getLeaveStatus(leave.startDate, leave.endDate);
-        const newLeave = { ...leave, id: generateId(), status } as Leave;
+        // Admin creates leaves as APPROVED, regular users create as PENDING
+        const approvalStatus = isAdmin ? 'APPROVED' : 'PENDING';
+        const newLeave: Leave = {
+            ...leave,
+            id: generateId(),
+            status,
+            approvalStatus,
+            createdBy: username,
+            createdAt: new Date().toISOString(),
+            // If admin creates, auto-fill decided fields
+            ...(isAdmin ? { decidedBy: username, decidedAt: new Date().toISOString() } : {})
+        };
         setLeaves(prev => [...prev, newLeave]);
         await dataStore.set(STORES.LEAVES, newLeave);
     };
@@ -154,6 +174,37 @@ export function DataProvider({ children }: DataProviderProps) {
     const deleteLeave = async (id: string) => {
         setLeaves(prev => prev.filter(leave => leave.id !== id));
         await dataStore.delete(STORES.LEAVES, id);
+    };
+
+    // Approval workflow functions
+    const approveLeave = async (id: string, info: { decidedBy: string; decisionNote?: string }) => {
+        const leave = leaves.find(l => l.id === id);
+        if (leave) {
+            const updated: Leave = {
+                ...leave,
+                approvalStatus: 'APPROVED',
+                decidedBy: info.decidedBy,
+                decidedAt: new Date().toISOString(),
+                decisionNote: info.decisionNote,
+            };
+            setLeaves(prev => prev.map(l => l.id === id ? updated : l));
+            await dataStore.set(STORES.LEAVES, updated);
+        }
+    };
+
+    const rejectLeave = async (id: string, info: { decidedBy: string; decisionNote?: string }) => {
+        const leave = leaves.find(l => l.id === id);
+        if (leave) {
+            const updated: Leave = {
+                ...leave,
+                approvalStatus: 'REJECTED',
+                decidedBy: info.decidedBy,
+                decidedAt: new Date().toISOString(),
+                decisionNote: info.decisionNote,
+            };
+            setLeaves(prev => prev.map(l => l.id === id ? updated : l));
+            await dataStore.set(STORES.LEAVES, updated);
+        }
     };
 
     const addHoliday = async (holiday: Omit<Holiday, 'id'>) => {
@@ -198,14 +249,23 @@ export function DataProvider({ children }: DataProviderProps) {
 
     const getEmployeeById = (id: string) => employees.find(emp => emp.id === id);
 
-    const getActiveLeaves = () => leaves.filter(leave => leave.status === 'ATIVO');
+    // Only return APPROVED leaves for these functions (official counts)
+    const getApprovedLeaves = () => leaves.filter(leave => leave.approvalStatus === 'APPROVED');
 
-    const getPlannedLeaves = () => leaves.filter(leave => leave.status === 'PLANEJADO');
+    const getPendingLeaves = () => leaves.filter(leave => leave.approvalStatus === 'PENDING');
+
+    const getActiveLeaves = () => leaves.filter(leave =>
+        leave.status === 'ATIVO' && leave.approvalStatus === 'APPROVED'
+    );
+
+    const getPlannedLeaves = () => leaves.filter(leave =>
+        leave.status === 'PLANEJADO' && leave.approvalStatus === 'APPROVED'
+    );
 
     const getTodayLeaves = () => {
         const today = new Date().toISOString().split('T')[0];
         return leaves.filter(leave => {
-            return leave.startDate <= today && leave.endDate >= today;
+            return leave.startDate <= today && leave.endDate >= today && leave.approvalStatus === 'APPROVED';
         });
     };
 
@@ -225,6 +285,8 @@ export function DataProvider({ children }: DataProviderProps) {
             addLeave,
             updateLeave,
             deleteLeave,
+            approveLeave,
+            rejectLeave,
             addHoliday,
             updateHoliday,
             deleteHoliday,
@@ -235,6 +297,8 @@ export function DataProvider({ children }: DataProviderProps) {
             getActiveLeaves,
             getPlannedLeaves,
             getTodayLeaves,
+            getPendingLeaves,
+            getApprovedLeaves,
             validateVacationRule: validateVacationRuleImpl,
         }}>
             {children}

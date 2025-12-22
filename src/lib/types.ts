@@ -52,6 +52,9 @@ export const leaveTypeColors: Record<string, string> = {
     OUTRO: 'bg-leave-other text-leave-other-foreground',
 };
 
+// Approval status for leaves
+export type ApprovalStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
+
 export interface Leave {
     id: string;
     employeeId: string;
@@ -64,9 +67,16 @@ export interface Leave {
     acquisitivePeriodEnd?: string;
     daysOff: number;
     efficiency?: number;
-    status: string;
+    status: string; // ATIVO | PLANEJADO | ENCERRADO (calendar status)
     notes?: string;
     workDaysOff?: number;
+    // Approval workflow fields
+    approvalStatus: ApprovalStatus;
+    decidedBy?: string; // Username of admin who approved/rejected
+    decidedAt?: string; // ISO date string of decision
+    decisionNote?: string; // Optional note from admin
+    createdBy?: string; // Username who created the leave
+    createdAt?: string; // ISO date string of creation
 }
 
 export interface Employee {

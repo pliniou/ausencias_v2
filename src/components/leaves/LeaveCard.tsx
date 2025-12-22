@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Calendar, User, Trash2 } from 'lucide-react';
 import { LeaveBadge } from '@/components/ui/LeaveBadge';
 import { StatusBadge } from '@/components/ui/StatusBadge';
+import { ApprovalStatusBadge } from '@/components/ui/ApprovalStatusBadge';
 import { Button } from '@/components/ui/button';
 import { ConfirmDeleteDialog } from '@/components/ui/ConfirmDeleteDialog';
 import { formatDateBR } from '@/lib/dateUtils';
@@ -48,7 +49,11 @@ export function LeaveCard({ leave, onClick, onDelete, className }: LeaveCardProp
                     <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-2">
                             <LeaveBadge type={leave.type} />
-                            <StatusBadge status={leave.status as "ATIVO" | "PLANEJADO" | "ENCERRADO"} />
+                            {leave.approvalStatus && leave.approvalStatus !== 'APPROVED' ? (
+                                <ApprovalStatusBadge status={leave.approvalStatus} />
+                            ) : (
+                                <StatusBadge status={leave.status as "ATIVO" | "PLANEJADO" | "ENCERRADO"} />
+                            )}
                         </div>
 
                         <div className="flex items-center gap-2 mb-1">

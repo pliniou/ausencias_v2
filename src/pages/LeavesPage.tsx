@@ -17,13 +17,14 @@ import { handleExportCSV, handleExportTXT, exportToXLSX } from '@/lib/exportUtil
 import { toast } from 'sonner';
 
 export default function LeavesPage() {
-    const { leaves, getActiveLeaves, getPlannedLeaves, deleteLeave } = useData();
+    const { leaves, getActiveLeaves, getPlannedLeaves, getPendingLeaves, deleteLeave } = useData();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [viewMode, setViewMode] = useState('grid');
     const [filters, setFilters] = useState(initialFilters);
 
     const activeLeavesRaw = getActiveLeaves();
     const plannedLeavesRaw = getPlannedLeaves();
+    const pendingLeavesRaw = getPendingLeaves();
     const endedLeavesRaw = leaves.filter((l) => l.status === 'ENCERRADO');
 
     const basicFilter = (l: Leave) => {
@@ -49,6 +50,7 @@ export default function LeavesPage() {
 
     const activeLeaves = activeLeavesRaw.filter(basicFilter);
     const plannedLeaves = plannedLeavesRaw.filter(basicFilter);
+    const pendingLeaves = pendingLeavesRaw.filter(basicFilter);
     const endedLeaves = endedLeavesRaw.filter(basicFilter);
     const allLeaves = leaves.filter(basicFilter);
 
@@ -166,6 +168,9 @@ export default function LeavesPage() {
                     <TabsTrigger value="ended">
                         Encerrados ({endedLeaves.length})
                     </TabsTrigger>
+                    <TabsTrigger value="pending">
+                        Pendentes ({pendingLeaves.length})
+                    </TabsTrigger>
                     <TabsTrigger value="all">
                         Todos ({allLeaves.length})
                     </TabsTrigger>
@@ -184,6 +189,14 @@ export default function LeavesPage() {
                         <EmptyState message={filters.search || filters.type !== 'all' || filters.status !== 'all' || filters.dateRange ? "Nenhum resultado para os filtros." : "Nenhum afastamento planejado."} />
                     ) : (
                         <LeaveGrid leaves={plannedLeaves} viewMode={viewMode} onDelete={deleteLeave} />
+                    )}
+                </TabsContent>
+
+                <TabsContent value="pending" className="space-y-4">
+                    {pendingLeaves.length === 0 ? (
+                        <EmptyState message={filters.search || filters.type !== 'all' || filters.status !== 'all' || filters.dateRange ? "Nenhum resultado para os filtros." : "Nenhuma solicitação pendente."} />
+                    ) : (
+                        <LeaveGrid leaves={pendingLeaves} viewMode={viewMode} onDelete={deleteLeave} />
                     )}
                 </TabsContent>
 

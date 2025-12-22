@@ -12,7 +12,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import CalendarPage from "./pages/CalendarPage";
 import LeavesPage from "./pages/LeavesPage";
-import RegistrationsPage from "./pages/RegistrationsPage";
+// RegistrationsPage removed - consolidated into AdminDashboard
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
@@ -51,11 +51,7 @@ const App = () => (
                                             <LayoutWrapper><LeavesPage /></LayoutWrapper>
                                         </ProtectedRoute>
                                     } />
-                                    <Route path="/cadastros" element={
-                                        <ProtectedRoute>
-                                            <LayoutWrapper><RegistrationsPage /></LayoutWrapper>
-                                        </ProtectedRoute>
-                                    } />
+                                    {/* /cadastros route removed - consolidated into AdminDashboard */}
                                     <Route path="/admin" element={
                                         <ProtectedRoute roles={['admin']}>
                                             <LayoutWrapper><AdminDashboard /></LayoutWrapper>

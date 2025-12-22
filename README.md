@@ -1,169 +1,126 @@
-# Controle de Ausências (Project Ausencias)
+# Sistema de Gestão de Ausências
 
-Sistema moderno para gestão de ausências e escalas de trabalho. Interface profissional desenvolvida com React, Vite, Tailwind CSS e ShadCN UI.
+Sistema moderno para gestão de ausências e escalas de trabalho. Interface profissional desenvolvida com React, Vite, Tailwind CSS e ShadCN UI, com suporte a Backend Node.js.
 
 ![Status](https://img.shields.io/badge/status-active-success.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 ## 🚀 Funcionalidades
 
-- **Autenticação Local**: Login com proteção de rotas e hash de senha via `bcryptjs`
-- **Armazenamento IndexedDB**: Persistência local de dados usando IndexedDB para melhor performance
-- **Sistema de Permissões**: Controle granular de acesso baseado em roles (admin, user, viewer)
-- **Dashboard Administrativo**: Controle total para administradores
-- **Design Premium**:
-  - Temas: Claro, Escuro e Sépia
-  - Tipografia moderna: `Outfit` para interface limpa
-  - Micro-animações e transições suaves
-- **Gestão de Afastamentos**: Visualização em lista, filtros avançados e exportação (TXT e CSV)
-- **Calendário Interativo**: Visualização mensal dos afastamentos
+- **Autenticação Híbrida**: Suporte a login local (IndexedDB) e via API.
+- **Armazenamento Robusto**: Persistência via IndexedDB para dados complexos e SQL.js para usuários.
+- **Sistema de Aprovação**: Workflow completo de aprovação de afastamentos (Admin -> Pendente -> Aprovado).
+- **Dashboard Interativo**:
+  - Relógio de Ponto (Brasília)
+  - Calendário Visual com Feriados e Ausências
+  - Cards de Estatísticas em Tempo Real
+- **Design Premium**: Themes (Light/Dark/Sepia), animações fluídas e componentes ShadCN UI.
+- **Exportação**: Dados exportáveis em CSV, XLSX e TXT.
 
-## 🛠️ Tecnologias
+## 🛠️ Stack Tecnológica
 
-- **Frontend**: React 18, Vite
-- **UI/UX**: Tailwind CSS, ShadCN UI, Lucide Icons
-- **Database**: IndexedDB (armazenamento local) + sql.js (SQLite WASM) para usuários
-- **Deploy**: GitHub Pages
+### Frontend
+- **Core**: React 18, Vite, TypeScript
+- **Estilização**: Tailwind CSS, ShadCN UI, Lucide Icons
+- **Estado/Dados**: React Context + IndexedDB (Dexie.js)
+- **Testes**: Vitest
 
-## 📦 Instalação e Execução
+### Backend (API)
+- **Runtime**: Node.js + Express
+- **Segurança**: BCryptJS, Express Session
+- **Banco de Dados**: Suporte a SQL (via sql.js/SQLite)
 
-### Pré-requisitos (Windows)
+## 📦 Instalação e Execução (Windows)
 
-Para executar este projeto em ambiente Windows, você precisará instalar:
+### 1. Pré-requisitos
+Certifique-se de ter instalado em sua máquina:
 
-1.  **Node.js**:
-    - Versão recomendada: v18 ou superior.
-    - Baixe e instale a versão LTS em [nodejs.org](https://nodejs.org/).
-    - Durante a instalação, certifique-se de marcar a opção "Add to PATH".
+*   **Node.js** (v18.0.0 ou superior) - [Download](https://nodejs.org/)
+    *   *Dica: Na instalação, marque a opção "Add to PATH".*
+*   **Git** for Windows - [Download](https://git-scm.com/download/win)
+*   **Terminal**: PowerShell 7+ ou Windows Terminal (Recomendado).
 
-2.  **Git**:
-    - Baixe e instale em [git-scm.com](https://git-scm.com/download/win).
-    - Essencial para versionamento e deploy.
-    - Escolha "Use Git from the Windows Command Prompt" durante a instalação.
+> **Nota**: Este projeto utiliza bibliotecas puras JavaScript (`bcryptjs`, `sql.js`), portanto **NÃO** é necessário instalar o Python ou Visual Studio Build Tools (C++) no Windows.
 
-3.  **Terminal**:
-    - Recomendamos o **PowerShell** (já vem no Windows) ou **Windows Terminal**.
-    - O **VS Code** também possui um terminal integrado excelente.
+### 2. Configuração do Projeto
 
-### Passo a Passo (Instalação)
+Abra o terminal na pasta onde deseja instalar o projeto:
 
-1.  **Clone o repositório** (ou baixe o ZIP):
+```powershell
+# 1. Clone o repositório
+git clone https://github.com/pliniou/Project_Ausencias.git
+cd Project_Ausencias
 
-    Abra o seu terminal (PowerShell ou CMD) e navegue até a pasta onde deseja salvar o projeto:
+# 2. Instale as dependências do Frontend
+npm install
 
-    ```powershell
-    git clone https://github.com/pliniou/Project_Ausencias.git
-    cd Project_Ausencias
-    ```
+# 3. Instale as dependências do Backend (Em uma nova aba/janela do terminal)
+cd backend
+npm install
+cd ..
+```
 
-    > **Nota**: Se você ainda não criou o repositório, você pode apenas baixar os arquivos e iniciar o git localmente (veja a seção "Primeira configuração").
+### 3. Executando a Aplicação
 
-2.  **Instale as dependências**:
+Para ter o ambiente completo funcionando, você precisará de **dois terminais** abertos:
 
-    No terminal, dentro da pasta do projeto, execute:
+**Terminal 1: Backend (API)**
+```powershell
+# Na pasta raiz do projeto
+cd backend
+npm run dev
+```
+*O servidor iniciará em `http://localhost:4000`*
 
-    ```powershell
-    npm install
-    ```
+**Terminal 2: Frontend (Interface)**
+```powershell
+# Na pasta raiz do projeto
+npm run dev
+```
+*O frontend iniciará em `http://localhost:8080` (Acesse este link no navegador)*
 
-    Este comando baixará todas as bibliotecas necessárias listadas no `package.json`.
+## 🧪 Testes
 
-3.  **Configuração do SQLite (WASM)**:
+O projeto utiliza **Vitest** para testes unitários e de integração no frontend.
 
-    O arquivo WASM do SQLite é geralmente copiado automaticamente durante o build pelo nosso script customizado no `vite.config.ts`.
-    
-    Caso precise fazer manualmente (erro de arquivo não encontrado):
-    ```powershell
-    # PowerShell
-    Copy-Item "node_modules/sql.js/dist/sql-wasm.wasm" -Destination "public/"
-    ```
+```powershell
+# Executar todos os testes
+npm test
 
-4.  **Inicie o Servidor de Desenvolvimento**:
+# Executar testes com interface visual (UI)
+npm run test:ui
+```
 
-    ```powershell
-    npm run dev
-    ```
-
-    O aplicativo estará disponível em: `http://localhost:8080`
-
-## 🔑 Acesso Padrão
-
-Ao iniciar o sistema pela primeira vez, três usuários de demonstração são criados:
-
-- **Admin**: `admin` / `demo123`
-- **Usuário**: `usuario` / `demo123`
-- **Visitante**: `visitante` / `demo123`
-
-> **⚠️ IMPORTANTE**: A senha padrão é **`demo123`**. Altere imediatamente em produção!
-
-## 🔒 Limitações de Segurança
-
-> **Este é um aplicativo client-side estático hospedado no GitHub Pages:**
->
-> - ❌ **Não há autenticação real** - validação apenas no navegador
-> - ❌ **Dados são locais** - armazenados apenas no IndexedDB do navegador de cada usuário
-> - ❌ **Sem compartilhamento** - dados não sincronizam entre dispositivos ou usuários
-> - ❌ **Não adequado para dados sensíveis** - use apenas para demonstração ou gestão pessoal
->
-> **Para uso corporativo real**: considere migrar para SharePoint com Entra ID (veja `docs/sharepoint-migration.md`)
-
-## 🌐 Deploy no GitHub Pages
-
-O projeto está configurado para deploy automatizado:
-
-1. Gere o build de produção:
-
-    ```bash
-    npm run build
-    ```
-
-2. Faça o deploy:
-
-    ```bash
-    npm run deploy
-    ```
-
-3. O sistema estará acessível em: `https://pliniou.github.io/Project_Ausencias/`
-
-## 📊 Armazenamento de Dados
-
-- **Usuários**: SQLite (sql.js WASM) persistido em `localStorage`
-- **Dados da aplicação**: IndexedDB para melhor performance e suporte a grandes volumes
-- **Sessão**: `sessionStorage` (expira ao fechar a aba)
-- **Migração automática**: Dados antigos em `localStorage` são migrados automaticamente para IndexedDB na primeira execução
-
-## 🎨 Temas Disponíveis
-
-- **Light** (Padrão): Interface clara e profissional
-- **Dark**: Modo escuro com alto contraste
-- **Sepia**: Modo leitura com tons quentes
-
-## 📁 Estrutura do Projeto
+## 📂 Estrutura de Pastas
 
 ```
-Project_Ausencias/
+/
+├── backend/            # Servidor API Node.js/Express
+├── public/             # Assets estáticos (Images, WASM)
 ├── src/
-│   ├── assets/          # Imagens e resources estáticos
-│   ├── auth/            # Sistema de permissões
-│   ├── components/      # Componentes reutilizáveis
-│   ├── context/         # Context providers (Auth, Data, Theme)
-│   ├── hooks/           # Custom hooks
-│   ├── lib/             # Utilidades e helpers
-│   ├── pages/           # Páginas da aplicação
-│   └── repositories/    # Camada de dados (IndexedDB)
-├── public/              # Assets públicos
-└── docs/                # Documentação adicional
+│   ├── auth/           # Lógica de permissões
+│   ├── components/     # Componentes React (UI, Dashboard, Forms)
+│   ├── context/        # Gerenciamento de Estado (Auth, Data, Config)
+│   ├── data/           # Camada de Persistência (IndexedDB)
+│   ├── pages/          # Rotas/Páginas da Aplicação
+│   └── lib/            # Utilitários e Tipos
+├── vite.config.ts      # Configuração do Vite (Proxy, Plugins)
+└── package.json        # Dependências e Scripts
 ```
 
-## 🚀 Próximos Passos
+## 🔧 Solução de Problemas Comuns
 
-Para evolução corporativa, consulte [`docs/sharepoint-migration.md`](docs/sharepoint-migration.md) para orientações sobre:
+**Erro: `sql-wasm.wasm not found`**
+O script de build deve copiar este arquivo automaticamente. Se falhar:
+```powershell
+Copy-Item "node_modules/sql.js/dist/sql-wasm.wasm" -Destination "public/"
+```
 
-- Migração para SharePoint Online
-- Integração com Entra ID (SSO)
-- Uso de SharePoint Lists ou Dataverse
-- Implementação de auditoria e compliance
+**Porta em uso**
+Se a porta 4000 ou 8080 estiver ocupada, edite:
+- Frontend: `vite.config.ts` (`server.port`)
+- Backend: `backend/server.ts` (`PORT`)
 
----
+## 📄 Licença
 
-**Desenvolvido com ❤️ usando React + Vite + Tailwind CSS**
+Distribuído sob a licença MIT. Veja `LICENSE` para mais informações.
