@@ -5,7 +5,7 @@ import { getLeaveStatus } from '@/lib/dateUtils';
 import { validateVacationRule } from '@/lib/businessRules';
 import { dataStore, STORES } from '@/repositories/DataStore';
 
-import { type Leave, type Employee, type Holiday, type CompanyEvent, type ApprovalStatus } from "@/lib/types";
+import { type Leave, type Employee, type Holiday, type CompanyEvent } from "@/lib/types";
 
 interface VacationValidationResult {
     valid: boolean;

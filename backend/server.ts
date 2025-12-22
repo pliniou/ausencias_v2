@@ -153,7 +153,7 @@ app.get('/api/me', requireAuth, (req: Request, res: Response) => {
 });
 
 // Employee CRUD
-app.get('/api/employees', requireAuth, (req: Request, res: Response) => {
+app.get('/api/employees', requireAuth, (_: Request, res: Response) => {
     const result = db.exec('SELECT id, name, department, position FROM employees');
     const rows = result.length > 0 ? result[0].values.map((r: (string | number | null)[]) => ({ id: r[0] as number, name: r[1] as string, department: r[2] as string, position: r[3] as string })) : [];
     res.json(rows);
@@ -183,13 +183,51 @@ app.delete('/api/employees/:id', requireAuth, (req: Request, res: Response) => {
     res.json({ deletedId: parseInt(id) });
 });
 
+// Leaves CRUD
+app.get('/api/leaves', requireAuth, (_: Request, res: Response) => {
+    const result = db.exec('SELECT id, employee_id, type, start_date, end_date FROM leaves');
+    const rows = result.length > 0 ? result[0].values.map(r => ({
+        id: r[0] as number,
+        employee_id: r[1] as number,
+        type: r[2] as string,
+        start_date: r[3] as string,
+        end_date: r[4] as string,
+    })) : [];
+    res.json(rows);
+});
+
+app.post('/api/leaves', requireAuth, (req: Request, res: Response) => {
+    const { employee_id, type, start_date, end_date } = req.body;
+    db.run('INSERT INTO leaves (employee_id, type, start_date, end_date) VALUES (?, ?, ?, ?)',
+        [employee_id, type, start_date, end_date]);
+    saveDb();
+    const lastId = db.exec('SELECT last_insert_rowid()')[0].values[0][0] as number;
+    res.json({ id: lastId, employee_id, type, start_date, end_date });
+});
+
+app.put('/api/leaves/:id', requireAuth, (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { employee_id, type, start_date, end_date } = req.body;
+    db.run('UPDATE leaves SET employee_id = ?, type = ?, start_date = ?, end_date = ? WHERE id = ?',
+        [employee_id, type, start_date, end_date, parseInt(id)]);
+    saveDb();
+    res.json({ id: parseInt(id), employee_id, type, start_date, end_date });
+});
+
+app.delete('/api/leaves/:id', requireAuth, (req: Request, res: Response) => {
+    const { id } = req.params;
+    db.run('DELETE FROM leaves WHERE id = ?', [parseInt(id)]);
+    saveDb();
+    res.json({ deletedId: parseInt(id) });
+});
+
 // Health check
-app.get('/api/health', (req: Request, res: Response) => {
+app.get('/api/health', (_: Request, res: Response) => {
     res.json({ status: 'ok' });
 });
 
 // Central backup endpoint
-app.get('/api/backup', requireAuth, (req: Request, res: Response) => {
+app.get('/api/backup', requireAuth, (_: Request, res: Response) => {
     try {
         saveDb(); // Ensure latest data is on disk
         const backupData = fs.readFileSync(dbPath);

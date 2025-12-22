@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 // src/context/AuthContext.tsx
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { isValidRole } from '@/auth/permissions';
@@ -26,12 +27,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const fetchMe = async () => {
             try {
                 const res = await fetch('/api/me', { credentials: 'include' });
-                if (res.ok) {
+                const contentType = res.headers.get('content-type');
+                if (res.ok && contentType && contentType.includes('application/json')) {
                     const data = await res.json();
                     setUser(data.user);
                 }
             } catch (e) {
-                console.error('Failed to fetch session', e);
+                // Silent fail for static deployment
+                console.warn('Session check failed (expected on static host)', e);
             } finally {
                 setLoading(false);
             }
@@ -46,6 +49,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             credentials: 'include',
             body: JSON.stringify({ username, password }),
         });
+
+        const contentType = res.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            throw new Error('Server returned non-JSON response. Check API URL.');
+        }
+
         if (!res.ok) {
             const err = await res.json();
             throw new Error(err.message || 'Login failed');
@@ -55,14 +64,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     const logout = async () => {
-        await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+        try {
+            await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+        } catch (e) { console.warn('Logout failed', e); }
         setUser(null);
     };
 
     // Admin helpers (optional)
     const getAllUsers = async () => {
         const res = await fetch('/api/users', { credentials: 'include' });
-        if (!res.ok) throw new Error('Failed to fetch users');
+        const contentType = res.headers.get('content-type');
+        if (!res.ok || !contentType?.includes('application/json')) {
+            throw new Error('Failed to fetch users or invalid response');
+        }
         return await res.json();
     };
 

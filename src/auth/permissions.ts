@@ -92,7 +92,7 @@ const PERMISSION_MATRIX = {
  * @param {string} permission - Permissão a verificar
  * @returns {boolean}
  */
-export function can(role, permission) {
+export function can(role: string, permission: string): boolean {
     if (!role || !permission) {
         console.warn('can(): role ou permission indefinidos', { role, permission });
         return false;
@@ -113,7 +113,7 @@ export function can(role, permission) {
  * @param {string} permission - Permissão a verificar
  * @returns {boolean}
  */
-export function hasPermission(user, permission) {
+export function hasPermission(user: { role: string }, permission: string): boolean {
     if (!user || !user.role) {
         console.warn('hasPermission(): usuário inválido ou sem role', user);
         return false;
@@ -129,7 +129,7 @@ export function hasPermission(user, permission) {
  * @param {string} permission - Permissão necessária
  * @throws {Error} Se usuário não tiver permissão
  */
-export function requirePermission(user, permission) {
+export function requirePermission(user: { role: string }, permission: string): void {
     if (!hasPermission(user, permission)) {
         throw new Error(`Permissão negada: você não tem permissão para ${permission}`);
     }
@@ -140,7 +140,7 @@ export function requirePermission(user, permission) {
  * @param {string} role - Role do usuário
  * @returns {Array<string>} Lista de permissões
  */
-export function getPermissionsForRole(role) {
+export function getPermissionsForRole(role: string): string[] {
     return Object.entries(PERMISSION_MATRIX)
         .filter(([_, allowedRoles]) => allowedRoles.includes(role))
         .map(([permission]) => permission);
@@ -151,6 +151,6 @@ export function getPermissionsForRole(role) {
  * @param {string} role - Role a validar
  * @returns {boolean}
  */
-export function isValidRole(role) {
+export function isValidRole(role: string): boolean {
     return Object.values(ROLES).includes(role);
 }

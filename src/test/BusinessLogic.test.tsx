@@ -26,7 +26,8 @@ describe('Business Logic Validation', () => {
             const existingLeaves: Leave[] = [{
                 id: '1', employeeId, employeeName: 'Test', employeeRole: 'Dev',
                 startDate: '2024-05-01', endDate: '2024-05-20', type: 'FERIAS',
-                acquisitivePeriodStart: acquisitiveStart, daysOff: 20, status: 'ATIVO'
+                acquisitivePeriodStart: acquisitiveStart, daysOff: 20, status: 'ATIVO',
+                approvalStatus: 'APPROVED'
             }];
 
             const result = validateVacationRule(existingLeaves, employeeId, 11, acquisitiveStart);
@@ -38,7 +39,8 @@ describe('Business Logic Validation', () => {
             const existingLeaves1: Leave[] = [{
                 id: '1', employeeId, employeeName: 'Test', employeeRole: 'Dev',
                 startDate: '2024-05-01', endDate: '2024-05-10', type: 'FERIAS',
-                acquisitivePeriodStart: acquisitiveStart, daysOff: 10, status: 'ENCERRADO'
+                acquisitivePeriodStart: acquisitiveStart, daysOff: 10, status: 'ENCERRADO',
+                approvalStatus: 'APPROVED'
             }];
             const result1 = validateVacationRule(existingLeaves1, employeeId, 20, acquisitiveStart);
             expect(result1.valid).toBe(true);
@@ -50,13 +52,13 @@ describe('Business Logic Validation', () => {
                     id: '1', employeeId, employeeName: 'Test', employeeRole: 'Dev',
                     startDate: '2024-05-01', endDate: '2024-05-10', type: 'FERIAS',
                     acquisitivePeriodStart: acquisitiveStart, daysOff: 10, status: 'ENCERRADO',
-                    workDaysOff: 8, efficiency: 80 // Add missing fields to satisfy typescript if strict
+                    workDaysOff: 8, efficiency: 80, approvalStatus: 'APPROVED' // Add missing fields to satisfy typescript if strict
                 },
                 {
                     id: '2', employeeId, employeeName: 'Test', employeeRole: 'Dev',
                     startDate: '2024-08-01', endDate: '2024-08-10', type: 'FERIAS',
                     acquisitivePeriodStart: acquisitiveStart, daysOff: 10, status: 'ENCERRADO',
-                    workDaysOff: 8, efficiency: 80
+                    workDaysOff: 8, efficiency: 80, approvalStatus: 'APPROVED'
                 }
             ];
             // Trying to take the last 10 days

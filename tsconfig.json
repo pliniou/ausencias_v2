@@ -29,7 +29,9 @@
         }
     },
     "include": [
-        "src"
+        "src",
+        "backend/**/*.ts",
+        "backend/**/*.d.ts"
     ],
     "references": [
         {

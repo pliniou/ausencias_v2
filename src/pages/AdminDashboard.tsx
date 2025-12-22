@@ -6,7 +6,8 @@ import {
     Download, Upload
 } from "lucide-react";
 
-import { useAuth, User } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
+import { User } from "@/types/auth";
 import { useData } from "@/context/DataContext";
 import { useConfig } from "@/context/ConfigContext";
 import { Button } from "@/components/ui/button";

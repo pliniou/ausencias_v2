@@ -7,8 +7,9 @@ Sistema moderno para gestão de ausências e escalas de trabalho. Interface prof
 
 ## 🚀 Funcionalidades
 
-- **Autenticação Híbrida**: Suporte a login local (IndexedDB) e via API.
-- **Armazenamento Robusto**: Persistência via IndexedDB para dados complexos e SQL.js para usuários.
+- **Autenticação Híbrida**: Suporte a login local (IndexedDB) e via API (Node.js + Express).
+- **CRUD e API**: Endpoints RESTful para gestão de colaboradores, ausências (leaves), feriados e eventos.
+- **Armazenamento Robusto**: Backup centralizado (SQLite) e sincronização via API.
 - **Sistema de Aprovação**: Workflow completo de aprovação de afastamentos (Admin -> Pendente -> Aprovado).
 - **Dashboard Interativo**:
   - Relógio de Ponto (Brasília)
@@ -16,6 +17,13 @@ Sistema moderno para gestão de ausências e escalas de trabalho. Interface prof
   - Cards de Estatísticas em Tempo Real
 - **Design Premium**: Themes (Light/Dark/Sepia), animações fluídas e componentes ShadCN UI.
 - **Exportação**: Dados exportáveis em CSV, XLSX e TXT.
+
+## 🌐 Demo Online
+
+O front-end da aplicação está publicado e acessível em:
+**[https://pliniou.github.io/ausencias_v2](https://pliniou.github.io/ausencias_v2)**
+
+> *Nota: A versão online do GitHub Pages roda em modo estático e pode ter funcionalidades limitadas sem o backend local rodando.*
 
 ## 🛠️ Stack Tecnológica
 
@@ -67,8 +75,8 @@ Para ter o ambiente completo funcionando, você precisará de **dois terminais**
 **Terminal 1: Backend (API)**
 ```powershell
 # Na pasta raiz do projeto
-cd backend
-npm run dev
+# Inicie o servidor TypeScript diretamente
+npx ts-node backend/server.ts
 ```
 *O servidor iniciará em `http://localhost:4000`*
 
@@ -78,6 +86,16 @@ npm run dev
 npm run dev
 ```
 *O frontend iniciará em `http://localhost:8080` (Acesse este link no navegador)*
+
+### 4. Novos Endpoints da API
+
+O backend agora fornece endpoints CRUD completos para ausências:
+
+*   `GET /api/leaves`: Listar todas as ausências.
+*   `POST /api/leaves`: Criar nova ausência.
+*   `PUT /api/leaves/:id`: Atualizar ausência.
+*   `DELETE /api/leaves/:id`: Remover ausência.
+*   `GET /api/backup`: Download do banco de dados SQLite completo.
 
 ## 🧪 Testes
 
