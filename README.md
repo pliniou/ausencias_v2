@@ -23,7 +23,11 @@ Sistema moderno para gestão de ausências e escalas de trabalho. Interface prof
 O front-end da aplicação está publicado e acessível em:
 **[https://pliniou.github.io/ausencias_v2](https://pliniou.github.io/ausencias_v2)**
 
-> *Nota: A versão online do GitHub Pages roda em modo estático e pode ter funcionalidades limitadas sem o backend local rodando.*
+> *Nota: A versão online do GitHub Pages funciona em "Modo Demo". Se o backend não estiver acessível, o sistema ativará automaticamente um mock de dados e autenticação.*
+>
+> **Credenciais para Teste (Demo Mode):**
+> *   **Admin**: Usuário `admin` / Senha `admin`
+> *   **Usuário Comum**: Usuário `user` / Senha `user`
 
 ## 🛠️ Stack Tecnológica
 

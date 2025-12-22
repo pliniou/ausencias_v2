@@ -107,13 +107,6 @@ async function initDb() {
         );
     `);
 
-    // Seed admin user if not exists
-    const existing = db.exec("SELECT id FROM users WHERE username = 'admin'");
-    if (existing.length === 0 || existing[0].values.length === 0) {
-        const hash = bcrypt.hashSync('demo123', 10);
-        db.run("INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)", ['admin', hash, 'admin']);
-    }
-
     saveDb();
 }
 
@@ -124,6 +117,33 @@ const requireAuth = (req: Request, res: Response, next: NextFunction) => {
     }
     res.status(401).json({ message: 'Unauthorized' });
 };
+
+// System Status & Setup
+app.get('/api/system/status', (_: Request, res: Response) => {
+    const result = db.exec("SELECT COUNT(*) FROM users");
+    const count = result.length > 0 ? result[0].values[0][0] as number : 0;
+    res.json({ initialized: count > 0 });
+});
+
+app.post('/api/setup', (req: Request, res: Response) => {
+    const result = db.exec("SELECT COUNT(*) FROM users");
+    const count = result.length > 0 ? result[0].values[0][0] as number : 0;
+
+    if (count > 0) {
+        return res.status(403).json({ message: 'System already initialized' });
+    }
+
+    const { username, password } = req.body;
+    if (!username || !password) {
+        return res.status(400).json({ message: 'Username and password required' });
+    }
+
+    const hash = bcrypt.hashSync(password, 10);
+    db.run("INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)", [username, hash, 'admin']);
+    saveDb();
+
+    res.json({ message: 'Setup complete' });
+});
 
 // Auth routes
 app.post('/api/login', (req: Request, res: Response) => {

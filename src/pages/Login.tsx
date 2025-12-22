@@ -23,9 +23,19 @@ const schema = z.object({
 });
 
 const Login = () => {
-    const { login } = useAuth();
+    const { login, checkSystemStatus } = useAuth();
     const navigate = useNavigate();
     const [error, setError] = React.useState('');
+
+    React.useEffect(() => {
+        const check = async () => {
+            const status = await checkSystemStatus();
+            if (!status.initialized) {
+                navigate('/setup');
+            }
+        };
+        check();
+    }, [checkSystemStatus, navigate]);
 
     const form = useForm({
         resolver: zodResolver(schema),

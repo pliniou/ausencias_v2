@@ -14,6 +14,7 @@ import CalendarPage from "./pages/CalendarPage";
 import LeavesPage from "./pages/LeavesPage";
 // RegistrationsPage removed - consolidated into AdminDashboard
 import Login from "./pages/Login";
+import SetupPage from "./pages/SetupPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import { Layout } from "@/components/layout/Layout";
@@ -34,6 +35,7 @@ const App = () => (
                             <Sonner />
                             <HashRouter>
                                 <Routes>
+                                    <Route path="/setup" element={<SetupPage />} />
                                     <Route path="/login" element={<Login />} />
 
                                     <Route path="/" element={
