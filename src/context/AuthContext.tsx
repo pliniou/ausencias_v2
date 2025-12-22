@@ -76,7 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             // Accept "admin" / "admin" or just allow any login for demo convenience if specific request
             // For now, let's allow admin/admin for full access, and user/user for limited
 
-            if (username === 'admin' && password === 'admin') {
+            if (username === 'admin' && password === 'demo123') {
                 const mockAdmin: User = { id: 1, username: 'admin', role: 'admin' };
                 setUser(mockAdmin);
                 localStorage.setItem('demo_user', JSON.stringify(mockAdmin));
@@ -88,7 +88,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 return;
             }
 
-            throw error; // Rethrow if not a valid demo credential
+            // If we are here, it means we could not connect to API (or API returned HTML)
+            // AND the credentials did not match demo users.
+
+            // Provide a clearer error message for the user
+            throw new Error('Credenciais inválidas (ou Backend offline)');
         }
     };
 
