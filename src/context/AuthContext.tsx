@@ -1,13 +1,8 @@
 // src/context/AuthContext.tsx
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { ROLES, isValidRole } from '@/auth/permissions';
+import { isValidRole } from '@/auth/permissions';
 
-export interface User {
-    id: number;
-    username: string;
-    role: string;
-    employee_id?: string | null;
-}
+import { User } from '@/types/auth';
 
 interface AuthContextType {
     user: User | null;

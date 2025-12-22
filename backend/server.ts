@@ -10,14 +10,21 @@ import bcrypt from 'bcryptjs';
 // sql.js types
 interface QueryExecResult {
     columns: string[];
-    values: any[][];
+    values: (string | number | null)[][];
 }
 
 interface SqlJsDatabase {
-    run(sql: string, params?: any[]): void;
-    exec(sql: string, params?: any[]): QueryExecResult[];
+    run(sql: string, params?: (string | number | null)[]): void;
+    exec(sql: string, params?: (string | number | null)[]): QueryExecResult[];
     export(): Uint8Array;
     close(): void;
+}
+
+// Extend express-session to include user property
+declare module 'express-session' {
+    interface SessionData {
+        user: { id: number; username: string; role: string };
+    }
 }
 
 interface SqlJsStatic {
@@ -55,7 +62,6 @@ function saveDb() {
 
 // Initialize database
 async function initDb() {
-    // @ts-ignore - sql.js has no type declarations, using inline types above
     const initSqlJs: (config?: { locateFile?: (file: string) => string }) => Promise<SqlJsStatic> = (await import('sql.js')).default;
     const SQL = await initSqlJs();
 
@@ -113,7 +119,7 @@ async function initDb() {
 
 // Helper to protect routes
 const requireAuth = (req: Request, res: Response, next: NextFunction) => {
-    if (req.session && (req.session as any).user) {
+    if (req.session && req.session.user) {
         return next();
     }
     res.status(401).json({ message: 'Unauthorized' });
@@ -127,13 +133,13 @@ app.post('/api/login', (req: Request, res: Response) => {
         return res.status(401).json({ message: 'Invalid credentials' });
     }
     const row = result[0].values[0];
-    const user = { id: row[0], username: row[1], password_hash: row[2] as string, role: row[3] };
+    const user = { id: row[0] as number, username: row[1] as string, password_hash: row[2] as string, role: row[3] as string };
     const valid = bcrypt.compareSync(password, user.password_hash);
     if (!valid) {
         return res.status(401).json({ message: 'Invalid credentials' });
     }
-    (req.session as any).user = { id: user.id, username: user.username, role: user.role };
-    res.json({ message: 'Logged in', user: (req.session as any).user });
+    req.session.user = { id: user.id, username: user.username, role: user.role };
+    res.json({ message: 'Logged in', user: req.session.user });
 });
 
 app.post('/api/logout', (req: Request, res: Response) => {
@@ -143,13 +149,13 @@ app.post('/api/logout', (req: Request, res: Response) => {
 });
 
 app.get('/api/me', requireAuth, (req: Request, res: Response) => {
-    res.json({ user: (req.session as any).user });
+    res.json({ user: req.session.user });
 });
 
 // Employee CRUD
 app.get('/api/employees', requireAuth, (req: Request, res: Response) => {
     const result = db.exec('SELECT id, name, department, position FROM employees');
-    const rows = result.length > 0 ? result[0].values.map((r: any[]) => ({ id: r[0], name: r[1], department: r[2], position: r[3] })) : [];
+    const rows = result.length > 0 ? result[0].values.map((r: (string | number | null)[]) => ({ id: r[0] as number, name: r[1] as string, department: r[2] as string, position: r[3] as string })) : [];
     res.json(rows);
 });
 

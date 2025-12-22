@@ -3,18 +3,9 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 import fs from "fs";
 
-// Plugin to copy sql-wasm.wasm to dist automatically
-const copySqlWasm = () => ({
-    name: 'copy-sql-wasm',
-    writeBundle() {
-        const src = path.resolve(__dirname, 'node_modules/sql.js/dist/sql-wasm.wasm');
-        const dest = path.resolve(__dirname, 'dist/sql-wasm.wasm');
-        if (fs.existsSync(src)) {
-            fs.copyFileSync(src, dest);
-            console.log('✅ Copied sql-wasm.wasm to dist/');
-        }
-    }
-});
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -29,7 +20,7 @@ export default defineConfig(({ mode }) => ({
             },
         },
     },
-    plugins: [react(), copySqlWasm()],
+    plugins: [react()],
     resolve: {
         alias: {
             "@": path.resolve(__dirname, "./src"),
